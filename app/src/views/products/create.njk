@@ -1,0 +1,42 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Cadastrar Produto</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="container form">
+    <form  class="card" method="post"  enctype="multipart/form-data"
+    {% if update %}
+        action="/products?_method=PUT"
+    {% else %}
+        action="/products"
+    {% endif %}
+    >
+
+        <div class="header">
+            <h3>Cadastrar Produto</h3>
+        </div>
+        <div class="fields">
+            {% include 'products/fields.njk' %}
+        </div>
+
+            {% if update %}
+                <button class="button update" type="submit">Atualizar produto</button>
+                <button class="button delete" type="submit">Deletar produto</button>
+                
+            {% else %}
+                <button class="button update" type="submit">Cadastrar produto</button>
+            {% endif %}
+        
+    </form>
+    {% if update %}
+        <script src="/replaceAction.js"></script>
+    {% endif %}
+</section>
+
+{% endblock %}

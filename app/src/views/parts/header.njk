@@ -1,0 +1,30 @@
+<header>
+    <div class="container">
+        <a class="logo" href="/">
+            <div>
+                <h1>Loja</h1>
+            </div>
+        </a>
+
+
+        <form class="search" method="get" action="/search">
+            <input type="search" name="search" placeholder="Buscar por produtos" {% if search.term %}
+                value="{{search.term}}" {% endif %}>
+        </form>
+
+        <nav class="primary">
+            <ul>
+                <li>
+                    <a href="/ads/create"><span class="material-symbols-outlined">
+                            add
+                        </span>Novo anuncio</a>
+                </li>
+                <li>
+                    <a href="/accounts"><span class="material-symbols-outlined">
+                            account_circle
+                        </span> Minha conta</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

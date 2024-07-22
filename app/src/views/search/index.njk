@@ -1,0 +1,29 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="search-products container">
+    <aside>
+        <div class="header">
+            <h2>{{search}}</h2>
+            <p>{{total_count}} encontrados</p>
+        </div>
+        <nav class="categories">
+            <h4>Categorias</h4>
+            <ul>
+                <li><a href="#">Eletrônicos</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    {{section.products(products)}}
+</section>
+
+{% endblock %}

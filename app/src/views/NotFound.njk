@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+    {% endblock %}
+
+</head>
+
+<body>
+    {% block content %}
+    <div id="container" class="container"></div>
+    <div class="notFoundTitle">
+        <h1>Página não encontrada</h1>
+    </div>
+    <script>
+        const container = document.getElementById("container");
+
+
+        lottie.loadAnimation({
+            container: container,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/animation.json'
+        });
+    </script>
+    {% endblock %}
+
+
+
+</body>
+
+</html>

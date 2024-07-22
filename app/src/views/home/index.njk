@@ -1,0 +1,18 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="shop container">
+    <h2>Ultimos produtos</h2>
+
+    {{section.products(products)}}
+</section>
+
+{% endblock %}

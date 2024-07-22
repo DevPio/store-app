@@ -1,0 +1,85 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>{{product.name}}</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="product-single container">
+    <div class="gallery">
+        <div class="highlight">
+            {% if defaultImage %}
+                <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
+
+            {% else %}
+                <img src="https://placehold.co/600x400/png?text=PRODUTO SEM FOTO" alt="productWithoutImg">
+            {% endif %}
+
+
+            
+        </div>
+         <div class="gallery-preview">
+            {% for image in images %}
+                <div  
+                    {% if loop.index0 == 0 %} 
+                        class="gallery-preview-item active" 
+                    {% else %}
+                        class="gallery-preview-item" 
+                    {% endif %}
+                    >
+                    <img src="{{image.url}}" alt="{{image.name}}" 
+                
+                    
+                  >
+                </div>
+            {% endfor %}
+        </div>
+        <div class="lighbox-target">
+           <div class="containerImageLightBox">
+             <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
+             <a class="lightbox-close" href="#">
+                <span class="material-symbols-outlined">
+                close
+                </span>
+            </a>
+           </div>
+            
+        </div>
+    </div>
+    <div class="info">
+        <h1>{{product.name}}</h1>
+
+        <div class="published">
+            Publicado em {{product.updatedAt}}
+        </div>
+
+
+        <div class="description">
+            <!-- {{product.description}} -->
+
+            {% for description in product.description %}
+                <p>{{description}}</p>
+            {% endfor %}
+        </div>
+
+        <div class="price-buy">
+            <div class="price">
+                {{product.price}}
+                <span class="old">
+                    {{product.oldPrice}}
+                </span>
+            </div>
+            <div class="buy">
+                <button class="button">Comprar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="/LighBox.js"></script>
+{% endblock %}
