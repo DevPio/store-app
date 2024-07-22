@@ -2,20 +2,20 @@
 
 <div class="items">
     {% for product in products %}
-        <div class="product">
-            <div class="image">
-                {% if product.defaultImage.src %}
-                <img src="{{product.defaultImage.src}}" alt="{{product.defaultImage.name}}">
-                {% else %}
-                <img src="https://placehold.co/500x500/png?text=PRODUTO SEM FOTO" alt="produto sem foto">
-                {% endif %}
+    <div class="product">
+        <div class="image">
+            {% if product.defaultImage.src %}
+            <img src="{{product.defaultImage.src}}" alt="{{product.defaultImage.name}}">
+            {% else %}
+            <img src="https://placehold.co/500x500/png?text=PRODUTO SEM FOTO" alt="produto sem foto">
+            {% endif %}
 
-            </div>
-            <p>{{product.price}}</p>
-            <h4>{{product.name}}</h4>
-
-            <a class="button" href="/products/show/{{product.id}}">Ver produto</a>
         </div>
+        <p>{{product.price}}</p>
+        <h4>{{product.name}}</h4>
+
+        <a class="button" href="/products/show/{{product.id}}">Ver produto</a>
+    </div>
     {% endfor %}
 </div>
 

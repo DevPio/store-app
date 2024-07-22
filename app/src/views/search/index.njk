@@ -6,7 +6,6 @@
 <title>Home</title>
 {% endblock %}
 
-
 {% block content %}
 
 <section class="search-products container">
@@ -18,7 +17,10 @@
         <nav class="categories">
             <h4>Categorias</h4>
             <ul>
-                <li><a href="#">Eletrônicos</a></li>
+                {% for category in categories %}
+                <li><a href="/search?search={{search}}&category_id={{category}}">{{category}}</a></li>
+                {% endfor %}
+
             </ul>
         </nav>
     </aside>

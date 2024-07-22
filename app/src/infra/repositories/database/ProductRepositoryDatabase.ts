@@ -144,11 +144,25 @@ export class ProductRepositoryDatabase implements ProductRepository {
         queryBuilder = 
         `
         ${queryBuilder}
-        SELECT *, (
+        SELECT 
+            product_data.id,
+            product_data.name,
+            product_data.category_id,
+            product_data.user_id,
+            product_data.description,
+            product_data.old_price,
+            product_data.price,
+            product_data.quantity,
+            product_data.status,
+            product_data.created_at,
+            product_data.updated_at,
+        (
             SELECT COUNT(*) FROM 
             product_data
-        ) AS total_count FROM product_data
-        
+        ) AS total_count,
+          categories.name AS category_name 
+        FROM product_data
+        LEFT JOIN categories ON (categories.id = product_data.category_id)
         `
         const producstsOutPut = await db.query<ProductOutPut>(queryBuilder)
         const products = producstsOutPut.rows.map(productOut=> {
@@ -166,6 +180,7 @@ export class ProductRepositoryDatabase implements ProductRepository {
 
             product.setCreatedAt(new Date(productOut.created_at))
             product.setUpdatedAt(new Date(productOut.updated_at))
+            product.setCategoryName(productOut.category_name as string)
 
             return product
         })

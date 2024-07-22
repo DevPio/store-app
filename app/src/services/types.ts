@@ -29,6 +29,7 @@ export type ProductOutPut = {
     created_at: Date;
     updated_at: Date
     total_count?:string
+    category_name?:string
 }
 
 export type FileProductOutPut = {

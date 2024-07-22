@@ -97,10 +97,15 @@ export class StoreController {
         }, 'products/create')
 
         http.route('get', '/search', async (params: any, body: ProductInput, files:any, query:any) => {
-            
-            const {products, total_count} = await productService.searchProduct(query.search, query.category_id)
+            const categories = await categoryService.getCategories()
+            console.log(query,categories)
+            const categoryId = categories.find(category=> category.name === query.category_id)
+            console.log(categoryId)
+            const {products, total_count} = await productService.searchProduct(query.search, categoryId ? categoryId.id : undefined)
+            const categoriesSet = new Set()
 
             const productWithDefaultImage = await Promise.all(products.map(async product=> {
+                categoriesSet.add(product.categoryName)
                 const files = await fileProductService.getFileByProduct(product.id)
 
                 const downloadFiles = await Promise.all(files.map(async file => {
@@ -113,7 +118,6 @@ export class StoreController {
                         url: blobFile
                     }
                 }))
-
                 return {
                     ...product,
                     defaultImage: {
@@ -129,7 +133,8 @@ export class StoreController {
             return {
                 products:productWithDefaultImage,
                 total_count,
-                search: query.search
+                search: query.search,
+                categories: [...categoriesSet.values()]
             };
 
         }, 'search/index')

@@ -10,6 +10,7 @@ export class Product {
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
+    categoryName?: string
 
     constructor(
         id: number,
@@ -42,6 +43,10 @@ export class Product {
 
     setUpdatedAt(date: Date) {
         this.updatedAt = date
+    }
+
+    setCategoryName(name:string) {
+        this.categoryName = name;
     }
 
     setOldPrice(price: number) {
