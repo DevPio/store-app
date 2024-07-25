@@ -29,10 +29,14 @@ export class ExpressAdapter implements Http {
 
             const output = await callback(req.params, req.body, req.files, req.query);
 
+            if (output && output.error) {
+                return res['render'](template, { ...output });
+            }
 
             if (redirect) {
                 return res['redirect'](output.url_redirect)
             }
+
 
             if (output) {
                 return res['render'](template, { ...output });

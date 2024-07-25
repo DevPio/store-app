@@ -171,6 +171,8 @@ form .item>div:nth-child(1) {
 }
 
 form .item input[type=text],
+form .item input[type=password],
+form .item input[type=email],
 form .item input[type=number],
 form .item textarea,
 form .item select {
@@ -522,4 +524,61 @@ form .fields {
 .search-products .categories ul li a:hover {
     color: black;
     font-weight: bold;
+}
+
+
+form .item input[name=email],
+form .item input[name=password],
+form .item input[name=passwordRepeat],
+form .item input[name=cpf_cnpj],
+form .item input[name=cep] {
+    max-width: 50%;
+}
+
+.form-register {
+    max-width: 50%;
+}
+
+
+button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+}
+
+.input .inputError {
+    width: 100%;
+    background-color: rgb(250, 76, 76) !important;
+    color: white !important;
+    border-radius: 4px !important;
+}
+
+
+.message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 22px;
+    text-transform: uppercase;
+    position: absolute;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(255, 65, 65);
+    width: 100%;
+    transform: translate(0px,0px);
+    transition: all 2s;
+    animation: moveY 400ms 3s ease-out forwards;
+}
+
+
+@keyframes moveY {
+    100% {
+        transform: translate(0,-300px);
+        /* visibility: hidden;
+        opacity: 0; */
+    }
 }

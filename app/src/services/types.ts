@@ -28,8 +28,8 @@ export type ProductOutPut = {
     status: boolean;
     created_at: Date;
     updated_at: Date
-    total_count?:string
-    category_name?:string
+    total_count?: string
+    category_name?: string
 }
 
 export type FileProductOutPut = {
@@ -37,4 +37,28 @@ export type FileProductOutPut = {
     name: string;
     path: string;
     product_id: number
+}
+
+export type UserOutPut = {
+    id: number;
+    name: string;
+    email: string;
+    password: string;
+    cpf_cnpj: number;
+    cep: string;
+    address: string;
+    created_at: string;
+    updated_at: string;
+}
+
+
+export type UserInput = {
+    id?: string;
+    name: string;
+    email: string;
+    password: string;
+    passwordRepeat: string;
+    cpf_cnpj: number;
+    cep: string;
+    fullAddress: string;
 }

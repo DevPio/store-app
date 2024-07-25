@@ -23,7 +23,19 @@ CREATE TABLE "files" (
   "path" TEXT NOT NULL,
   "product_id" INT
 );
+CREATE TABLE "users" (
+  "id" SERIAL PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "email" TEXT UNIQUE NOT NULL,
+  "password" TEXT NOT NULL,
+  "cpf_cnpj" INT UNIQUE NOT NULL,
+  "cep" TEXT,
+  "address" TEXT,
+  "created_at" TIMESTAMP DEFAULT NOW(),
+  "updated_at" TIMESTAMP DEFAULT NOW()
+)
 
+ALTER TABLE "products" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id")
 -- Adicionando chaves estrangeiras
 
 ALTER TABLE "products"
@@ -31,6 +43,8 @@ ALTER TABLE "products"
 
 ALTER TABLE "files"
   ADD CONSTRAINT "fk_product" FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
+
 
 
 

@@ -1,25 +1,25 @@
 import { FileArray, UploadedFile } from "express-fileupload";
 import { CategoryService } from "../../services/CategoryService";
 import { ProductService } from "../../services/ProductService";
-import { ProductInput } from "../../services/types";
+import { ProductInput, UserInput } from "../../services/types";
 import { Http } from "../http/ExpressAdapter";
 import { StorageService } from "../../services/StorageService";
 import { FileProductService } from "../../services/FileProductService";
 import { FileProduct } from "../../domain/entities/File";
-import { Product } from "../../domain/entities/Product";
+import { UserService } from "../../services/UserService";
 
 
 export class StoreController {
 
-    constructor(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService) {
-        this.addStoreRender(http, productService, categoryService, storageService, fileProductService)
+    constructor(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService, userService: UserService) {
+        this.addStoreRender(http, productService, categoryService, storageService, fileProductService, userService)
     }
 
-    addStoreRender(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService) {
+    addStoreRender(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService, userService: UserService) {
         http.route('get', '/', async (params: any, body: any) => {
             const products = await productService.getAllProducts()
 
-            const productWithDefaultImage = await Promise.all(products.map(async product=> {
+            const productWithDefaultImage = await Promise.all(products.map(async product => {
                 const files = await fileProductService.getFileByProduct(product.id)
 
                 const downloadFiles = await Promise.all(files.map(async file => {
@@ -32,21 +32,21 @@ export class StoreController {
                         url: blobFile
                     }
                 }))
-                
+
                 return {
                     ...product,
                     defaultImage: {
                         src: downloadFiles.at(0)?.url,
                         name: downloadFiles.at(0)?.name
                     },
-                    price: Intl.NumberFormat('pt-BR',{
-                        style:'currency',
-                        currency:'BRL'
+                    price: Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
                     }).format(product.price / 100)
                 }
             }))
             return {
-                products:productWithDefaultImage
+                products: productWithDefaultImage
             };
         }, 'home/index')
 
@@ -96,15 +96,15 @@ export class StoreController {
             return { product, categories, update: true, files: downloadFiles, rows: product.description?.split('\n').length }
         }, 'products/create')
 
-        http.route('get', '/search', async (params: any, body: ProductInput, files:any, query:any) => {
+        http.route('get', '/search', async (params: any, body: ProductInput, files: any, query: any) => {
             const categories = await categoryService.getCategories()
-            console.log(query,categories)
-            const categoryId = categories.find(category=> category.name === query.category_id)
+            console.log(query, categories)
+            const categoryId = categories.find(category => category.name === query.category_id)
             console.log(categoryId)
-            const {products, total_count} = await productService.searchProduct(query.search, categoryId ? categoryId.id : undefined)
+            const { products, total_count } = await productService.searchProduct(query.search, categoryId ? categoryId.id : undefined)
             const categoriesSet = new Set()
 
-            const productWithDefaultImage = await Promise.all(products.map(async product=> {
+            const productWithDefaultImage = await Promise.all(products.map(async product => {
                 categoriesSet.add(product.categoryName)
                 const files = await fileProductService.getFileByProduct(product.id)
 
@@ -124,14 +124,14 @@ export class StoreController {
                         src: downloadFiles.at(0)?.url,
                         name: downloadFiles.at(0)?.name
                     },
-                    price: Intl.NumberFormat('pt-BR',{
-                        style:'currency',
-                        currency:'BRL'
+                    price: Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
                     }).format(product.price / 100)
                 }
             }))
             return {
-                products:productWithDefaultImage,
+                products: productWithDefaultImage,
                 total_count,
                 search: query.search,
                 categories: [...categoriesSet.values()]
@@ -156,8 +156,6 @@ export class StoreController {
                     url: blobFile
                 }
             }))
-
-           
 
             return {
                 product: {
@@ -190,7 +188,7 @@ export class StoreController {
                 },
                 defaultImage: downloadFiles.at(0),
                 images: downloadFiles
-            
+
 
             }
         }, 'products/show')
@@ -236,6 +234,55 @@ export class StoreController {
 
             return returnObj
         }, '', true)
+
+
+        http.route('get', '/users', async (params: any, body: any) => {
+
+            return {};
+        }, 'user/register.njk')
+
+
+        http.route('get', '/users/:userId', async (params: any, body: any) => {
+
+            const user = await userService.getUserById(params.userId)
+
+            return { user, update: true };
+        }, 'user/register.njk')
+
+
+        http.route('post', '/users/register', async (params: any, body: UserInput) => {
+
+
+
+            const findUser = await userService.getUserByEmail(body.email)
+
+            if (findUser) {
+                return {
+                    error: {
+                        message: "Email já utilizado."
+                    }
+                }
+            }
+
+            const user = await userService.saveUser(body)
+
+            return { url_redirect: `/users/${user.id}` };
+        }, 'user/register.njk', true)
+
+
+        http.route('put', '/users/register', async (params: any, body: UserInput) => {
+
+
+
+
+
+            const user = await userService.updateUser(body)
+
+
+
+
+            return { url_redirect: `/users/${user.id}` };
+        }, 'user/register.njk', true)
 
 
         http.route('get', '*', async (params: any, body: ProductInput) => {
