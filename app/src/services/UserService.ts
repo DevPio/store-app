@@ -1,11 +1,10 @@
 import { User } from "../domain/entities/User";
 import { UserRepository } from "../domain/repositories/UserRepository";
+import { BcryptHash } from "../infra/adapters/ByCriptHash";
 import { UserInput } from "./types";
 
 
 export class UserService {
-
-
     constructor(private userRepository: UserRepository) {
         this.userRepository = userRepository;
     }
@@ -21,8 +20,8 @@ export class UserService {
             user.name,
             user.email,
             user.password,
-            user.cpf_cnpj,
-            user.cep,
+            parseInt(user.cpf_cnpj.replace(/\D/g, '')),
+            user.cep.replace(/\D/g, ''),
             user.fullAddress
         )
         return await this.userRepository.update(newUser);
@@ -31,13 +30,14 @@ export class UserService {
         return await this.userRepository.getById(id)
     }
     async saveUser(user: UserInput) {
+        const bcrypt = new BcryptHash()
         const newUser = new User(
             0,
             user.name,
             user.email,
-            user.password,
-            user.cpf_cnpj,
-            user.cep,
+            await bcrypt.hash(user.password),
+            parseInt(user.cpf_cnpj.replace(/\D/g, '')),
+            user.cep.replace(/\D/g, ''),
             user.fullAddress
         )
         return await this.userRepository.save(newUser);

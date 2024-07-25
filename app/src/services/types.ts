@@ -58,7 +58,7 @@ export type UserInput = {
     email: string;
     password: string;
     passwordRepeat: string;
-    cpf_cnpj: number;
+    cpf_cnpj: string;
     cep: string;
     fullAddress: string;
 }

@@ -11,14 +11,14 @@
         <input type="email" name="email" placeholder="Digite seu email" value="{{user.email}}">
     </div>
 </div>
-
+{% if not user.id %}
 <div class="item">
     <div>Senha</div>
     <div class="input">
         <input type="password" name="password"  value="{{user.password}}">
     </div>
 </div>
-
+{% endif %}
 
 {% if not user.id %}
 

@@ -252,7 +252,17 @@ export class StoreController {
 
         http.route('post', '/users/register', async (params: any, body: UserInput) => {
 
+            const keys = Object.keys(body)
 
+            for (const key of keys) {
+                //@ts-ignore
+                if (!body[key]) return {
+                    user: body,
+                    error: {
+                        message: `Preencha o campo ${key}`
+                    }
+                }
+            }
 
             const findUser = await userService.getUserByEmail(body.email)
 
@@ -272,13 +282,7 @@ export class StoreController {
 
         http.route('put', '/users/register', async (params: any, body: UserInput) => {
 
-
-
-
-
             const user = await userService.updateUser(body)
-
-
 
 
             return { url_redirect: `/users/${user.id}` };
