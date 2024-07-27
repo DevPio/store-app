@@ -20,6 +20,15 @@
 </div>
 {% endif %}
 
+{% if user.id %}
+<div class="item">
+    <div>Senha</div>
+    <div class="input">
+        <input type="password" name="password"  value="">
+    </div>
+</div>
+{% endif %}
+
 {% if not user.id %}
 
 <div class="item">

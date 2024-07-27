@@ -7,6 +7,7 @@ import { StorageService } from "../../services/StorageService";
 import { FileProductService } from "../../services/FileProductService";
 import { FileProduct } from "../../domain/entities/File";
 import { UserService } from "../../services/UserService";
+import { BcryptHash } from "../adapters/ByCriptHash";
 
 
 export class StoreController {
@@ -98,9 +99,7 @@ export class StoreController {
 
         http.route('get', '/search', async (params: any, body: ProductInput, files: any, query: any) => {
             const categories = await categoryService.getCategories()
-            console.log(query, categories)
             const categoryId = categories.find(category => category.name === query.category_id)
-            console.log(categoryId)
             const { products, total_count } = await productService.searchProduct(query.search, categoryId ? categoryId.id : undefined)
             const categoriesSet = new Set()
 
@@ -193,8 +192,9 @@ export class StoreController {
             }
         }, 'products/show')
 
-        http.route('delete', '/products', async (params: any, { id }: ProductInput) => {
-            await productService.deleteProduct(id as number);
+        http.route('delete', '/products', async (params: any, body: ProductInput) => {
+
+            await productService.deleteProduct(body.id as number);
 
             return { url_redirect: 'products/create' };
         }, 'products/create', true)
@@ -237,20 +237,41 @@ export class StoreController {
 
 
         http.route('get', '/users', async (params: any, body: any) => {
-
             return {};
         }, 'user/register.njk')
 
 
-        http.route('get', '/users/:userId', async (params: any, body: any) => {
+        http.route('get', '/users/:userId', async (params: any, body: any, files: any, query: any, session: any) => {
 
             const user = await userService.getUserById(params.userId)
+
+            if (!user) {
+                return {
+                    error: {
+                        message: "Usuário não encontrado"
+                    }
+                }
+            }
+
+            if (session.error) {
+                const currentError = session.error
+                delete session.error
+                return { user, update: true, error: currentError };
+            }
+
+            if (session.success) {
+                const success = session.success
+
+                delete session.success
+
+                return { user, update: true, success };
+            }
 
             return { user, update: true };
         }, 'user/register.njk')
 
 
-        http.route('post', '/users/register', async (params: any, body: UserInput) => {
+        http.route('post', '/users', async (params: any, body: UserInput) => {
 
             const keys = Object.keys(body)
 
@@ -274,18 +295,58 @@ export class StoreController {
                 }
             }
 
+
             const user = await userService.saveUser(body)
 
             return { url_redirect: `/users/${user.id}` };
         }, 'user/register.njk', true)
 
 
-        http.route('put', '/users/register', async (params: any, body: UserInput) => {
+        http.route('put', '/users', async (params: any, body: UserInput, files: any, query: any, session: any) => {
+
+            if (!body.password) {
+                session.error = {
+                    message: "Por favor preencha a senha para atualizar seu cadastro."
+                }
+                return {
+                    user: body,
+                    url_redirect: `/users/${body.id}`
+                }
+            }
+
+
+            const getUser = await userService.getUserById(parseInt(body.id as string))
+
+
+            const bcrypt = new BcryptHash()
+
+            const passwordEqual = await bcrypt.compare(body.password, getUser?.password as string)
+
+            if (!passwordEqual) {
+                session.error = {
+                    message: "Senha incorreta!"
+                }
+                return {
+                    user: body,
+                    url_redirect: `/users/${body.id}`
+                }
+            }
 
             const user = await userService.updateUser(body)
 
-
+            session.success = {
+                message: "Usuário atualizado com sucesso!"
+            }
             return { url_redirect: `/users/${user.id}` };
+        }, 'user/register.njk', true)
+
+
+
+        http.route('delete', '/users', async (params: any, body: UserInput) => {
+
+            await userService.deleteUser(body.email)
+
+            return { url_redirect: `/users` };
         }, 'user/register.njk', true)
 
 

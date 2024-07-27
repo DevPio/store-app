@@ -61,3 +61,16 @@ CREATE TRIGGER set_timestamp_trigger
 BEFORE UPDATE ON products
 FOR EACH ROW
 EXECUTE PROCEDURE set_timestamp();
+
+
+
+CREATE TABLE "session" (
+  "sid" varchar NOT NULL COLLATE "default",
+  "sess" json NOT NULL,
+  "expire" timestamp(6) NOT NULL
+)
+WITH (OIDS=FALSE);
+
+ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");

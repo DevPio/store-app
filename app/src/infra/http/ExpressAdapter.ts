@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express'
 import methodOverride from 'method-override'
 import fileUpload from 'express-fileupload'
 import nunjucks from 'nunjucks'
+import session from './Session'
+
 export type HttpMethod = 'get' | 'post' | 'head' | 'put' | 'delete' | 'connect' | 'options' | 'trace' | 'patch';
 
 export interface Http {
@@ -17,6 +19,7 @@ export class ExpressAdapter implements Http {
         this.app.use(express.static('public'))
         this.app.use(methodOverride('_method'))
         this.app.use(fileUpload())
+        this.app.use(session)
         this.app.set('view engine', 'njk')
         nunjucks.configure('src/views', {
             express: this.app,
@@ -26,9 +29,12 @@ export class ExpressAdapter implements Http {
     }
     route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean): void {
         this.app[method](url, async (req: Request, res: Response) => {
+            const output = await callback(req.params, req.body, req.files, req.query, req.session);
 
-            const output = await callback(req.params, req.body, req.files, req.query);
 
+            if (output && output.error && redirect) {
+                return res['redirect'](output.url_redirect)
+            }
             if (output && output.error) {
                 return res['render'](template, { ...output });
             }
@@ -36,7 +42,6 @@ export class ExpressAdapter implements Http {
             if (redirect) {
                 return res['redirect'](output.url_redirect)
             }
-
 
             if (output) {
                 return res['render'](template, { ...output });

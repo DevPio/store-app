@@ -62,7 +62,6 @@ export class UserRepositoryDatabase implements UserRepository {
 
         const userOut = getUser.rows[0]
 
-        if (!userOut) return
         const user = new User(
             userOut.id,
             userOut.name,
@@ -119,22 +118,42 @@ export class UserRepositoryDatabase implements UserRepository {
         return newInstanceUser
     }
     async update(user: User): Promise<User> {
-        const updateUser = await db.query<UserOutPut>(`
-            UPDATE users
+        let query = `
+        UPDATE users
             SET name = $1, email = $2, password = $3, cpf_cnpj = $4, cep = $5, address = $6
             WHERE id = $7 
-
+        RETURNING *
+        
+        
+        `
+        let values = [
+            user.name,
+            user.email,
+            user.password,
+            user.cpfCnpj,
+            user.cep,
+            user.address,
+            user.id
+        ]
+        if (!user.password) {
+            query = `
+            UPDATE users
+                SET name = $1, email = $2, cpf_cnpj = $3, cep = $4, address = $5
+                WHERE id = $6 
             RETURNING *
-            `,
-            [
+            `
+            values = [
                 user.name,
                 user.email,
-                user.password,
                 user.cpfCnpj,
                 user.cep,
                 user.address,
                 user.id
             ]
+
+        }
+        const updateUser = await db.query<UserOutPut>(query,
+            values
         )
 
         const userOut = updateUser.rows[0]
@@ -151,8 +170,13 @@ export class UserRepositoryDatabase implements UserRepository {
 
         return newInstanceUser
     }
-    delete(email: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(email: string): Promise<void> {
+        await db.query(`
+            DELETE FROM users
+            WHERE email = $1
+            `, [
+            email
+        ])
     }
 
 }

@@ -30,14 +30,14 @@ const userService = new UserService(userRepository)
 
 const htpp = new ExpressAdapter()
 new StoreController
-(
-    htpp, 
-    productService, 
-    categoryService, 
-    storageService, 
-    fileProductRepository,
-    userService
-)
+    (
+        htpp,
+        productService,
+        categoryService,
+        storageService,
+        fileProductRepository,
+        userService
+    )
 
 
 htpp.listen(5000, () => {

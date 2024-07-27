@@ -10,23 +10,23 @@
 {% block content %}
 
 <section class="container form form-register">
-    <form class="card" method="post" enctype="multipart/form-data" {% if update %} action="/users/register?_method=PUT" {%
-        else %} action="/users/register" {% endif %}>
+    <form class="card" method="post"  {% if update %} action="/users?_method=PUT" {%
+        else %} action="/users" {% endif %}>
 
         <div class="header">
             <h3>Registrar</h3>
         </div>
         <div class="fields">
             {% include './fields.njk' %}
+
+            {% if update %}
+            <button class="button update"  type="submit">Atualizar registro</button>
+            <button class="button delete" type="submit">Deletar registro</button>
+            {% else %}
+                <button class="button update"  type="submit">Registrar</button>
+            {% endif %}
         </div>
-
-        {% if update %}
-        <button class="button update"  type="submit">Atualizar registro</button>
-        <button class="button delete" type="submit">Deletar registro</button>
-
-        {% else %}
-            <button class="button update"  type="submit">Registrar</button>
-        {% endif %}
+        
 
     </form>
     {% if update %}

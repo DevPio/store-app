@@ -9,17 +9,25 @@ export class UserService {
         this.userRepository = userRepository;
     }
 
+    async deleteUser(email: string) {
+        return await this.userRepository.delete(email)
+    }
 
     async getUserByEmail(email: string) {
         return await this.userRepository.get(email)
     }
 
     async updateUser(user: UserInput) {
+        let password = user.password;
+        const bcrypt = new BcryptHash()
+        if (password) {
+            password = await bcrypt.hash(password)
+        }
         const newUser = new User(
             parseInt(user.id as string),
             user.name,
             user.email,
-            user.password,
+            password,
             parseInt(user.cpf_cnpj.replace(/\D/g, '')),
             user.cep.replace(/\D/g, ''),
             user.fullAddress
