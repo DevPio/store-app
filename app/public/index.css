@@ -640,3 +640,18 @@ button[disabled] {
     color: black !important;
     font-weight: bold;
 }
+
+.form-login ul {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.form-login ul li a {
+    color: #777;
+    transition: all 200ms;
+}
+
+.form-login ul li a:hover {
+    color: black;
+    font-weight: bold;
+}

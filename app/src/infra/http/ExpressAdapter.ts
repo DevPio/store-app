@@ -3,11 +3,12 @@ import methodOverride from 'method-override'
 import fileUpload from 'express-fileupload'
 import nunjucks from 'nunjucks'
 import session from './Session'
+import { redirectLogin } from '../middlewares/redirectLogin'
 
 export type HttpMethod = 'get' | 'post' | 'head' | 'put' | 'delete' | 'connect' | 'options' | 'trace' | 'patch';
 
 export interface Http {
-    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean): void;
+    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware?: Function): void;
     listen(port: number, callback?: () => void): void;
 }
 
@@ -27,16 +28,17 @@ export class ExpressAdapter implements Http {
             noCache: true
         })
     }
-    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean): void {
+    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware?: Function): void {
         this.app[method](url, async (req: Request, res: Response) => {
-            const output = await callback(req.params, req.body, req.files, req.query, req.session);
 
+            const output = await callback(req.params, req.body, req.files, req.query, req.session);
 
             if (output && output.error && redirect) {
                 return res['redirect'](output.url_redirect)
             }
             if (output && output.error) {
-                return res['render'](template, { ...output });
+                //@ts-ignore
+                return res['render'](template, { ...output, user: req.session.user });
             }
 
             if (redirect) {
@@ -44,13 +46,15 @@ export class ExpressAdapter implements Http {
             }
 
             if (output) {
-                return res['render'](template, { ...output });
+                //@ts-ignore
+                return res['render'](template, { ...output, user: req.session.user });
             }
 
             return res['render'](template);
 
         });
     }
+
     listen(port: number, callback?: () => void) {
 
         if (typeof callback === 'function') return this.app?.listen(port, callback)

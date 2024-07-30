@@ -47,7 +47,8 @@ export class StoreController {
                 }
             }))
             return {
-                products: productWithDefaultImage
+                products: productWithDefaultImage,
+
             };
         }, 'home/index')
 
@@ -348,6 +349,69 @@ export class StoreController {
 
             return { url_redirect: `/users` };
         }, 'user/register.njk', true)
+
+
+        http.route('get', '/login', async (params: any, body: UserInput, files: any, query: any, session: any) => {
+
+            if (session.error) {
+                const currentError = session.error
+                delete session.error
+                return { error: currentError };
+            }
+
+            return {};
+        }, 'session/index.njk')
+
+
+        http.route('post', '/login', async (params: any, body: UserInput, files: any, query: any, session: any) => {
+
+            const keys = Object.keys(body)
+
+            for (const key of keys) {
+
+                //@ts-ignore
+                if (!body[key]) {
+                    session.error = {
+                        message: "Por favor preencha todos os campos!"
+                    }
+                    return {
+                        user: body,
+                        url_redirect: `/login`
+                    }
+                }
+            }
+
+            const getUser = await userService.getUserByEmail(body.email)
+
+            if (!getUser) {
+                session.error = {
+                    message: "Usuário não encontrado, por favor crie uma conta!"
+                }
+                return {
+                    user: body,
+                    url_redirect: `/login`
+                }
+            }
+
+
+            const bcrypt = new BcryptHash()
+
+
+            const equal = await bcrypt.compare(body.password, getUser.password)
+
+            if (!equal) {
+                session.error = {
+                    message: "Senha incorreta!"
+                }
+                return {
+                    user: body,
+                    url_redirect: `/login`
+                }
+            }
+
+            session.user = getUser
+            return { url_redirect: `/` };
+        }, 'session/index.njk', true)
 
 
         http.route('get', '*', async (params: any, body: ProductInput) => {
