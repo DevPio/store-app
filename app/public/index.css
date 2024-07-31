@@ -137,7 +137,7 @@ nav.primary ul li a i {
 
 
 
-section.form {
+section form {
     background-color: white;
     padding: 32px 24px;
     margin: 32px auto;
@@ -527,11 +527,11 @@ form .fields {
 }
 
 
-form .item input[name=email],
-form .item input[name=password],
-form .item input[name=passwordRepeat],
-form .item input[name=cpf_cnpj],
-form .item input[name=cep] {
+.form .item input[name=email],
+.form .item input[name=password],
+.form .item input[name=passwordRepeat],
+.form .item input[name=cpf_cnpj],
+.form .item input[name=cep] {
     max-width: 50%;
 }
 
@@ -561,6 +561,7 @@ button[disabled] {
 .message {
     display: flex;
     justify-content: center;
+    z-index: 1;
     align-items: center;
     padding: 22px;
     text-transform: uppercase;

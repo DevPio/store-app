@@ -7,4 +7,5 @@ export interface UserRepository {
     save(user: User): Promise<User>;
     update(user: User): Promise<User>;
     delete(email: string): Promise<void>;
+    setToken(userId: number, token: string, token_expires: Date): Promise<void>
 }

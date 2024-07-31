@@ -170,6 +170,21 @@ export class UserRepositoryDatabase implements UserRepository {
 
         return newInstanceUser
     }
+
+    async setToken(userId: number, token: string, token_expires: Date) {
+        await db.query(`
+            UPDATE users
+                SET reset_token = $1, reset_token_expires = $2
+            WHERE id = $3
+            `,
+            [
+                token,
+                token_expires,
+                userId
+            ]
+
+        )
+    }
     async delete(email: string): Promise<void> {
         await db.query(`
             DELETE FROM users

@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<section class="container form form-register">
+<section class="container form-register">
     <form class="card form-login" method="post" action="/login" >
 
         <div class="header">
@@ -27,8 +27,8 @@
         </div>
         
         <ul>
-            <li><a href="">Registre-se</a></li>
-            <li><a href="">Esqueci a senha</a></li>
+            <li><a href="/users">Registre-se</a></li>
+            <li><a href="/forgot-password">Esqueci a senha</a></li>
         </ul>
     </form>
     {% if update %}

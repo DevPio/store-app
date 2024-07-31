@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import methodOverride from 'method-override'
 import fileUpload from 'express-fileupload'
 import nunjucks from 'nunjucks'
@@ -11,6 +11,8 @@ export interface Http {
     route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware?: Function): void;
     listen(port: number, callback?: () => void): void;
 }
+
+const defaultRoute = (req: Request, res: Response, next: NextFunction) => next()
 
 export class ExpressAdapter implements Http {
     app?: any
@@ -28,8 +30,8 @@ export class ExpressAdapter implements Http {
             noCache: true
         })
     }
-    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware?: Function): void {
-        this.app[method](url, async (req: Request, res: Response) => {
+    route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware = defaultRoute): void {
+        this.app[method](url, middleware, async (req: Request, res: Response) => {
 
             const output = await callback(req.params, req.body, req.files, req.query, req.session);
 

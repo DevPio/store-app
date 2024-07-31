@@ -51,15 +51,37 @@ formUser.addEventListener("submit", (event) => {
 const events = ["keypress", "keyup"];
 
 events.forEach((event) => {
-  cpfCnpj.addEventListener(event, (_) => {
-    let cleanValue = cpfCnpj.value.replace(/\D/g, "");
+  if (cpfCnpj) {
+    cpfCnpj.addEventListener(event, (_) => {
+      let cleanValue = cpfCnpj.value.replace(/\D/g, "");
 
-    if (cleanValue.length > 14) {
-      const items = cleanValue
-        .split("")
-        .filter((_, index) => index <= 13)
-        .join("");
-      cleanValue = items;
+      if (cleanValue.length > 14) {
+        const items = cleanValue
+          .split("")
+          .filter((_, index) => index <= 13)
+          .join("");
+        cleanValue = items;
+        cleanValue = cleanValue.replace(/(\d{2})(\d)/, "$1.$2");
+
+        cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
+
+        cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1/$2");
+
+        cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
+
+        cpfCnpj.value = cleanValue;
+        return;
+      }
+      if (cleanValue.length <= TOTAL_DIGITS_CPF) {
+        cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
+
+        cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
+        cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1-$2");
+
+        cpfCnpj.value = cleanValue;
+        return;
+      }
+
       cleanValue = cleanValue.replace(/(\d{2})(\d)/, "$1.$2");
 
       cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
@@ -69,141 +91,132 @@ events.forEach((event) => {
       cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
 
       cpfCnpj.value = cleanValue;
-      return;
-    }
-    if (cleanValue.length <= TOTAL_DIGITS_CPF) {
-      cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
+    });
+  }
 
-      cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
-      cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1-$2");
+  if (cep) {
+    cep.addEventListener(event, (_) => {
+      let cleanValue = cep.value.replace(/[-]/g, "");
 
-      cpfCnpj.value = cleanValue;
-      return;
-    }
+      if (cleanValue.length > 8) {
+        const items = cleanValue
+          .split("")
+          .filter((_, index) => index <= 7)
+          .join("");
 
-    cleanValue = cleanValue.replace(/(\d{2})(\d)/, "$1.$2");
+        cleanValue = items;
+        cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
 
-    cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1.$2");
+        cep.value = cleanValue;
+        return;
+      }
+      if (cleanValue.length > 4) {
+        cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
 
-    cleanValue = cleanValue.replace(/(\d{3})(\d)/, "$1/$2");
-
-    cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
-
-    cpfCnpj.value = cleanValue;
-  });
-
-  cep.addEventListener(event, (_) => {
-    let cleanValue = cep.value.replace(/[-]/g, "");
-
-    if (cleanValue.length > 8) {
-      const items = cleanValue
-        .split("")
-        .filter((_, index) => index <= 7)
-        .join("");
-
-      cleanValue = items;
-      cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
-
-      cep.value = cleanValue;
-      return;
-    }
-    if (cleanValue.length > 4) {
-      cleanValue = cleanValue.replace(/(\d{4})(\d)/, "$1-$2");
-
-      cep.value = cleanValue;
-    }
-  });
+        cep.value = cleanValue;
+      }
+    });
+  }
 });
 
 ["DOMContentLoaded", "change", "focusout"].forEach((event) => {
-  cep.addEventListener(event, (_) => {
-    let cleanValue = cep.value.replace(/[-]/g, "");
-    const spanError = cep.parentElement.querySelector(".inputError");
-    if (spanError) {
-      cep.parentElement.removeChild(spanError);
-    }
-    if (cleanValue.length === 0) {
-      fields.cep = true;
+  if (cep) {
+    cep.addEventListener(event, (_) => {
+      let cleanValue = cep.value.replace(/[-]/g, "");
+      const spanError = cep.parentElement.querySelector(".inputError");
+      if (spanError) {
+        cep.parentElement.removeChild(spanError);
+      }
+      if (cleanValue.length === 0) {
+        fields.cep = true;
+        disabledButton();
+        return cep.insertAdjacentElement(
+          "afterend",
+          createSpan("Campo Obrigatório")
+        );
+      }
+
+      if (cleanValue.length < 8) {
+        fields.cep = true;
+        disabledButton();
+        return cep.insertAdjacentElement(
+          "afterend",
+          createSpan("CEP inválido")
+        );
+      }
+
+      fields.cep = false;
       disabledButton();
-      return cep.insertAdjacentElement(
-        "afterend",
-        createSpan("Campo Obrigatório")
-      );
-    }
+      return cep.parentElement.removeChild(spanError);
+    });
+  }
+  if (cpfCnpj) {
+    cpfCnpj.addEventListener(event, (_) => {
+      let cleanValue = cpfCnpj.value.replace(/[./-]/g, "");
 
-    if (cleanValue.length < 8) {
-      fields.cep = true;
-      disabledButton();
-      return cep.insertAdjacentElement("afterend", createSpan("CEP inválido"));
-    }
+      const spanError = cpfCnpj.parentElement.querySelector(".inputError");
+      if (spanError) {
+        cpfCnpj.parentElement.removeChild(spanError);
+      }
 
-    fields.cep = false;
-    disabledButton();
-    return cep.parentElement.removeChild(spanError);
-  });
-  cpfCnpj.addEventListener(event, (_) => {
-    let cleanValue = cpfCnpj.value.replace(/[./-]/g, "");
+      if (cleanValue.length === 0) {
+        fields.cpf_cnpj = true;
+        disabledButton();
+        return cpfCnpj.insertAdjacentElement(
+          "afterend",
+          createSpan("Campo obrigatório")
+        );
+      }
+      if (cleanValue.length < 11) {
+        fields.cpf_cnpj = true;
+        disabledButton();
+        return cpfCnpj.insertAdjacentElement(
+          "afterend",
+          createSpan("CPF inválido")
+        );
+      }
 
-    const spanError = cpfCnpj.parentElement.querySelector(".inputError");
-    if (spanError) {
-      cpfCnpj.parentElement.removeChild(spanError);
-    }
+      if (cleanValue.length > 11 && cleanValue.length < 14) {
+        fields.cpf_cnpj = true;
+        disabledButton();
+        return cpfCnpj.insertAdjacentElement(
+          "afterend",
+          createSpan("CNPJ inválido")
+        );
+      }
 
-    if (cleanValue.length === 0) {
-      fields.cpf_cnpj = true;
-      disabledButton();
-      return cpfCnpj.insertAdjacentElement(
-        "afterend",
-        createSpan("Campo obrigatório")
-      );
-    }
-    if (cleanValue.length < 11) {
-      fields.cpf_cnpj = true;
-      disabledButton();
-      return cpfCnpj.insertAdjacentElement(
-        "afterend",
-        createSpan("CPF inválido")
-      );
-    }
+      const firstCondition = cleanValue.length >= 11 || cleanValue.length >= 14;
+      if (firstCondition) {
+        fields.cpf_cnpj = false;
+        disabledButton();
+        return cpfCnpj.parentElement.removeChild(spanError);
+      }
+    });
+  }
 
-    if (cleanValue.length > 11 && cleanValue.length < 14) {
-      fields.cpf_cnpj = true;
-      disabledButton();
-      return cpfCnpj.insertAdjacentElement(
-        "afterend",
-        createSpan("CNPJ inválido")
-      );
-    }
+  if (email) {
+    email.addEventListener(event, (_) => {
+      const regexEmail =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    const firstCondition = cleanValue.length >= 11 || cleanValue.length >= 14;
-    if (firstCondition) {
-      fields.cpf_cnpj = false;
-      disabledButton();
-      return cpfCnpj.parentElement.removeChild(spanError);
-    }
-  });
+      const spanError = email.parentElement.querySelector(".inputError");
+      if (spanError) {
+        email.parentElement.removeChild(spanError);
+      }
+      if (!email.value.match(regexEmail)) {
+        fields.email = true;
+        disabledButton();
+        return email.insertAdjacentElement(
+          "afterend",
+          createSpan("Email inválido")
+        );
+      }
 
-  email.addEventListener(event, (_) => {
-    const regexEmail =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    const spanError = email.parentElement.querySelector(".inputError");
-    if (spanError) {
-      email.parentElement.removeChild(spanError);
-    }
-    if (!email.value.match(regexEmail)) {
-      fields.email = true;
-      disabledButton();
-      return email.insertAdjacentElement(
-        "afterend",
-        createSpan("Email inválido")
-      );
-    }
-
-    if (email.value.match(regexEmail)) {
-      fields.email = false;
-      disabledButton();
-      return email.parentElement.removeChild(spanError);
-    }
-  });
+      if (email.value.match(regexEmail)) {
+        fields.email = false;
+        disabledButton();
+        return email.parentElement.removeChild(spanError);
+      }
+    });
+  }
 });

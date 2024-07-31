@@ -50,4 +50,9 @@ export class UserService {
         )
         return await this.userRepository.save(newUser);
     }
+
+
+    async setToken(userId: number, token: string, token_expires: Date) {
+        await this.userRepository.setToken(userId, token, token_expires)
+    }
 }
