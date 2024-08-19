@@ -499,6 +499,60 @@ export class StoreController {
             return {};
         }, 'session/forgot-password.njk')
 
+
+
+        http.route('get', '/ads', async (params: any, body: UserInput, files: any, query: any, session: any) => {
+
+            if (session.error) {
+                const currentError = session.error
+                delete session.error
+                return { error: currentError };
+            }
+
+            if (session.success) {
+                const success = session.success
+
+                delete session.success
+
+                return { success };
+            }
+
+            const products = await productService.getProductByUser(session.user.id)
+
+            const productWithDefaultImage = await Promise.all(products.map(async product => {
+                const files = await fileProductService.getFileByProduct(product.id)
+
+                const downloadFiles = await Promise.all(files.map(async file => {
+                    const mimeType = file.path.split('.')[1]
+                    const blobFile = await storageService.downloadFile(file.name, `image/${mimeType}`)
+
+                    return {
+                        id: file.id,
+                        name: file.name,
+                        url: blobFile
+                    }
+                }))
+
+                return {
+                    ...product,
+                    defaultImage: {
+                        src: downloadFiles.at(0)?.url,
+                        name: downloadFiles.at(0)?.name
+                    },
+                    price: Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL'
+                    }).format(product.price / 100)
+                }
+            }))
+
+            return {
+                products: productWithDefaultImage,
+
+            };
+
+        }, 'user/ads.njk')
+
         http.route('get', '*', async (params: any, body: ProductInput) => {
 
             return {};

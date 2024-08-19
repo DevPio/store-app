@@ -15,6 +15,7 @@
   "description": "",
   "dependencies": {
     "@azure/storage-blob": "^12.23.0",
+    "@faker-js/faker": "^8.4.1",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.10",
     "bcrypt": "^5.1.1",

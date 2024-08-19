@@ -1,0 +1,36 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Criar usuário</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="container productsUser">
+    <div class="header">
+            <h3>Meus Anuncios</h3>
+    </div>
+    <div class="items">
+        {% for product in products %}
+            <div class="item">
+                <div class="image" style="background-image: url({{product.defaultImage.src}});"></div>
+
+               <div class="contentInfo">
+                    <div class="info">
+                        <div class="title">{{product.name}}</div>
+                    </div>
+
+                    <div class="actions">
+                        <a href="/products/{{product.id}}">Editar</a>
+                        <a href="/products/show/{{product.id}}">Visualizar</a>
+                    </div>
+               </div>
+            </div> 
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

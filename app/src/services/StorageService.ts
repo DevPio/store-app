@@ -14,7 +14,11 @@ export class StorageService {
     }
 
     async downloadFile(blobName: string, type: string) {
-        return await this.storageAdapter.downloadFile(this.container, blobName, type)
+        try {
+            return await this.storageAdapter.downloadFile(this.container, blobName, type)
+        } catch (error) {
+
+        }
     }
 
 

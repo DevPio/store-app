@@ -14,7 +14,12 @@ export class ProductService {
         return await this.productRepository.get(idProduct);
     }
 
-    async getAllProducts(){
+
+    async getProductByUser(id: number) {
+        return await this.productRepository.getByUser(id)
+    }
+
+    async getAllProducts() {
         return await this.productRepository.getAll()
     }
 
@@ -92,7 +97,7 @@ export class ProductService {
         return product
     }
 
-    async searchProduct(name: string, category_id?:number){
+    async searchProduct(name: string, category_id?: number) {
         return await this.productRepository.search(name, category_id)
     }
 }

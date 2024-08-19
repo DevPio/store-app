@@ -39,6 +39,32 @@ export class ProductRepositoryDatabase implements ProductRepository {
         product.setOldPrice(productOutPut.old_price)
         return product
     }
+
+
+    async getByUser(id: number): Promise<Product[]> {
+        const productData = await db.query<ProductOutPut>("SELECT * FROM products WHERE user_id = $1", [id])
+
+        const productOutPut = productData.rows.map(productOut => {
+            const product = new Product(
+                productOut.id,
+                productOut.category_id,
+                productOut.user_id,
+                productOut.name,
+                productOut.price,
+                productOut.quantity,
+                productOut.status,
+                productOut.description
+            );
+
+            product.setCreatedAt(new Date(productOut.created_at))
+            product.setUpdatedAt(new Date(productOut.updated_at))
+            product.setOldPrice(productOut.old_price)
+
+            return product
+        })
+
+        return productOutPut
+    }
     async save(product: Product): Promise<ProductOutPut> {
         const { rows } = await db.query(`
             INSERT INTO products 
@@ -122,27 +148,27 @@ export class ProductRepositoryDatabase implements ProductRepository {
     }
 
 
-    async search(name:string, category_id?: number){
+    async search(name: string, category_id?: number) {
         let queryBuilder = `
            WITH product_data AS (
             SELECT * FROM products 
             WHERE (name ILIKE '%${name}%' OR description ILIKE '%${name}%') 
         `;
 
-        if(category_id){
+        if (category_id) {
             queryBuilder = `
                 ${queryBuilder}
                 AND category_id = ${category_id})
             `
         }
-        if(!category_id){
+        if (!category_id) {
             queryBuilder = `
                 ${queryBuilder})
                 
             `
         }
-        queryBuilder = 
-        `
+        queryBuilder =
+            `
         ${queryBuilder}
         SELECT 
             product_data.id,
@@ -165,7 +191,7 @@ export class ProductRepositoryDatabase implements ProductRepository {
         LEFT JOIN categories ON (categories.id = product_data.category_id)
         `
         const producstsOutPut = await db.query<ProductOutPut>(queryBuilder)
-        const products = producstsOutPut.rows.map(productOut=> {
+        const products = producstsOutPut.rows.map(productOut => {
             const product = new Product(
                 productOut.id,
                 productOut.category_id,
@@ -185,10 +211,10 @@ export class ProductRepositoryDatabase implements ProductRepository {
             return product
         })
 
-        if(products.length > 0){
+        if (products.length > 0) {
             return {
                 products,
-                total_count:parseInt(producstsOutPut.rows[0]['total_count'] as string)
+                total_count: parseInt(producstsOutPut.rows[0]['total_count'] as string)
             }
         }
         return {

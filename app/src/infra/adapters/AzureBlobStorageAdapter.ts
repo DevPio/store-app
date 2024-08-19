@@ -25,6 +25,7 @@ export class AzureBlobStorageAdapter implements StorageAdapter {
     }
     async downloadFile(container: string, blobName: string, type: string): Promise<string> {
         const containerClient = this.client.getContainerClient(container);
+        await containerClient.createIfNotExists();
         const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
         const downloadResponse = await blockBlobClient.download(0);

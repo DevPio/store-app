@@ -12,8 +12,24 @@ export class CategoryRepositoryDatabase implements CategoryRepository {
     get(idCategory: number): Promise<Category> {
         throw new Error("Method not implemented.");
     }
-    save(category: Category): Promise<number> {
-        throw new Error("Method not implemented.");
+    async save(category: Category): Promise<Category> {
+        const categoryInput = await db.query(`
+            INSERT INTO categories
+            (
+                name
+            )
+            VALUES
+            (
+                $1
+            )
+            RETURNING *
+            `,
+            [
+                category.name
+            ]
+        )
+        const categoryOut = categoryInput.rows[0]
+        return new Category(categoryOut.id, categoryOut.name)
     }
     update(category: Category): Promise<void> {
         throw new Error("Method not implemented.");
