@@ -2,6 +2,8 @@ import session from 'express-session'
 import pgSession from 'connect-pg-simple'
 import { db } from '../database/db'
 
+
+
 const dbSession = pgSession(session)
 
 export default session({

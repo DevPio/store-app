@@ -1,6 +1,6 @@
 
 import { AzureBlobStorageAdapter } from './infra/adapters/AzureBlobStorageAdapter';
-import { StoreController } from './infra/controllers/store-controller';
+import { MainController } from './infra/controllers/MainController';
 import { ExpressAdapter } from './infra/http/ExpressAdapter';
 import { CategoryRepositoryDatabase } from './infra/repositories/database/CategoryRepositoryDatabase';
 import { FileProductRepositoryDatabase } from './infra/repositories/database/FileProductRepositoryDatabase';
@@ -29,7 +29,7 @@ const userRepository = new UserRepositoryDatabase()
 const userService = new UserService(userRepository)
 
 const htpp = new ExpressAdapter()
-new StoreController
+new MainController
     (
         htpp,
         productService,

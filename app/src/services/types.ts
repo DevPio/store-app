@@ -62,3 +62,17 @@ export type UserInput = {
     cep: string;
     fullAddress: string;
 }
+
+
+export interface OrderOutPut {
+    id: number;
+    sellerId: number;
+    buyerId: number;
+    productId: number;
+    price: number;
+    quantity: number;
+    total: number;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+}

@@ -9,8 +9,8 @@
 
 {% block content %}
 
-<section class="container form-register">
-    <form class="card form-login" method="post" action="/login" >
+<section class="container form form-register">
+    <form class="card form-login" method="post" action="/login">
 
         <div class="header">
             <h3>Entrar</h3>
@@ -19,13 +19,13 @@
             {% include './fields.njk' %}
 
             {% if update %}
-            <button class="button update"  type="submit">Atualizar registro</button>
+            <button class="button update" type="submit">Atualizar registro</button>
             <button class="button delete" type="submit">Deletar registro</button>
             {% else %}
-                <button class="button update"  type="submit">Entrar</button>
+            <button class="button update" type="submit">Entrar</button>
             {% endif %}
         </div>
-        
+
         <ul>
             <li><a href="/users">Registre-se</a></li>
             <li><a href="/forgot-password">Esqueci a senha</a></li>

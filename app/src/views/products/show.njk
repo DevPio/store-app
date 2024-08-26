@@ -13,41 +13,33 @@
     <div class="gallery">
         <div class="highlight">
             {% if defaultImage %}
-                <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
+            <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
 
             {% else %}
-                <img src="https://placehold.co/600x400/png?text=PRODUTO SEM FOTO" alt="productWithoutImg">
+            <img src="https://placehold.co/600x400/png?text=PRODUTO SEM FOTO" alt="productWithoutImg">
             {% endif %}
 
 
-            
+
         </div>
-         <div class="gallery-preview">
+        <div class="gallery-preview">
             {% for image in images %}
-                <div  
-                    {% if loop.index0 == 0 %} 
-                        class="gallery-preview-item active" 
-                    {% else %}
-                        class="gallery-preview-item" 
-                    {% endif %}
-                    >
-                    <img src="{{image.url}}" alt="{{image.name}}" 
-                
-                    
-                  >
-                </div>
+            <div {% if loop.index0==0 %} class="gallery-preview-item active" {% else %} class="gallery-preview-item" {%
+                endif %}>
+                <img src="{{image.url}}" alt="{{image.name}}">
+            </div>
             {% endfor %}
         </div>
         <div class="lighbox-target">
-           <div class="containerImageLightBox">
-             <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
-             <a class="lightbox-close" href="#">
-                <span class="material-symbols-outlined">
-                close
-                </span>
-            </a>
-           </div>
-            
+            <div class="containerImageLightBox">
+                <img src="{{defaultImage.url}}" alt="{{defaultImage.name}}">
+                <a class="lightbox-close" href="#">
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+                </a>
+            </div>
+
         </div>
     </div>
     <div class="info">
@@ -62,7 +54,7 @@
             <!-- {{product.description}} -->
 
             {% for description in product.description %}
-                <p>{{description}}</p>
+            <p>{{description}}</p>
             {% endfor %}
         </div>
 
@@ -74,7 +66,10 @@
                 </span>
             </div>
             <div class="buy">
-                <button class="button">Comprar</button>
+                <form style="display: inline;background-color: transparent;border: none;" action="/cart" method="post">
+                    <input type="hidden" name="id" value="{{product.id}}">
+                    <button class="button">Comprar</button>
+                </form>
             </div>
         </div>
     </div>

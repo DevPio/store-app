@@ -37,6 +37,20 @@
                     </ul>
                     {% endif %}
                 </li>
+
+                <li>
+                    <a class="cartItems" href="/cart">
+                        <span class="material-symbols-outlined">
+                            shopping_cart
+                        </span>
+                        {% if totalItems > 0 %}
+                            <span class="totalItemsCart">
+                                {{totalItems}}
+                            </span>
+                        {% endif %}
+                    </a>
+
+                </li>
             </ul>
         </nav>
     </div>

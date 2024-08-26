@@ -1,0 +1,79 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Carrinho</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="cart container">
+
+    {% if items and items.length > 0 %}
+        <div class="cartHeader">
+            <p>Produto</p>
+            <p>Preço</p>
+            <p>Quantidade</p>
+        </div>
+    {% endif %}
+
+    <div class="cartItems">
+        {% if items and items.length > 0  %}
+            {% for item in items %}
+                <div class="cartItem">
+                    <a class="cartInfo" href="">
+                        <img src="{{item.defaultImage.src}}" alt="">
+                        <span>{{item.name}}</span>
+                    </a>
+                    <span class="price">{{item.price}}</span>
+                    <div class="quantity-control">
+                        <form action="/cart/remove-one/" method="post">
+                            <input type="hidden" name="id" value="{{item.id}}">
+                            <button class="remove">
+                                <span class="material-symbols-outlined">
+                                    remove_circle_outline
+                                </span>
+                            </button>
+                        </form>
+                        <div class="quantity">{{item.quantity}}</div>
+
+                        <form action="/cart/add-one/" method="post">
+                            <input type="hidden" name="id" value="{{item.id}}">
+                            <button class="add">
+                                <span class="material-symbols-outlined">
+                                    add_circle_outline
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <form class="trash" action="/cart/delete" method="post">
+                        <input type="hidden" name="id" value="{{item.id}}">
+                        <button class="remove trashIcon">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+            {% else%}
+            <h1 class="cartEmpty">Carrinho vazio</h1>
+        {% endif %}
+    </div>
+
+    {% if items and items.length > 0  %}
+        <div class="acts">
+            <button class="button keepShopping">Continuar Comprando</button>
+            <button class="button keepRequest">Realizar pedido</button>
+        </div>
+    {% else %}
+        <div class="actsCartEmpty">
+            <a href="/"><button class="button keepShopping">Continuar Comprando</button></a>
+        </div>
+    {% endif %}
+</section>
+
+{% endblock %}

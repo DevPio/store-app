@@ -3,7 +3,8 @@ import methodOverride from 'method-override'
 import fileUpload from 'express-fileupload'
 import nunjucks from 'nunjucks'
 import session from './Session'
-import { redirectLogin } from '../middlewares/redirectLogin'
+import { Cart, countTotal } from '../../domain/entities/Cart'
+
 
 export type HttpMethod = 'get' | 'post' | 'head' | 'put' | 'delete' | 'connect' | 'options' | 'trace' | 'patch';
 
@@ -11,6 +12,8 @@ export interface Http {
     route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware?: Function): void;
     listen(port: number, callback?: () => void): void;
 }
+
+
 
 const defaultRoute = (req: Request, res: Response, next: NextFunction) => next()
 
@@ -33,14 +36,24 @@ export class ExpressAdapter implements Http {
     route(method: HttpMethod, url: string, callback: Function, template: string, redirect?: boolean, middleware = defaultRoute): void {
         this.app[method](url, middleware, async (req: Request, res: Response) => {
 
+
             const output = await callback(req.params, req.body, req.files, req.query, req.session);
+
+            //@ts-ignore
+            if (req.session && !req.session.cart) {
+                //@ts-ignore
+                req.session.cart = new Cart()
+            }
+
+            //@ts-ignore
+            const cart = req.session.cart as Cart
 
             if (output && output.error && redirect) {
                 return res['redirect'](output.url_redirect)
             }
             if (output && output.error) {
                 //@ts-ignore
-                return res['render'](template, { ...output, user: req.session.user });
+                return res['render'](template, { ...output, user: req.session ? req.session.user : null, totalItems: countTotal(cart) });
             }
 
             if (redirect) {
@@ -49,7 +62,7 @@ export class ExpressAdapter implements Http {
 
             if (output) {
                 //@ts-ignore
-                return res['render'](template, { ...output, user: req.session.user });
+                return res['render'](template, { ...output, user: req.session ? req.session.user : null, totalItems: countTotal(cart) });
             }
 
             return res['render'](template);

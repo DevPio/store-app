@@ -121,6 +121,7 @@ nav.primary ul {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 14px;
 }
 
 nav.primary ul li a {
@@ -137,7 +138,7 @@ nav.primary ul li a i {
 
 
 
-section form {
+.form form {
     background-color: white;
     padding: 32px 24px;
     margin: 32px auto;
@@ -158,11 +159,11 @@ section.form h3 {
 }
 
 
-form .item {
+.form form .item {
     margin-bottom: 16px;
 }
 
-form .item>div:nth-child(1) {
+.form form .item>div:nth-child(1) {
     color: #777;
     text-transform: uppercase;
     font-size: 14px;
@@ -170,12 +171,12 @@ form .item>div:nth-child(1) {
     margin-bottom: 8px;
 }
 
-form .item input[type=text],
-form .item input[type=password],
-form .item input[type=email],
-form .item input[type=number],
-form .item textarea,
-form .item select {
+.form form .item input[type=text],
+.form form .item input[type=password],
+.form form .item input[type=email],
+.form form .item input[type=number],
+.form form .item textarea,
+.form form .item select {
     width: 100%;
     padding: 8px 16px;
     box-shadow: 2px 2px 2px -2px rgba(60, 60, 60, 0.5);
@@ -185,11 +186,11 @@ form .item select {
     font-size: 16px;
 }
 
-form .item textarea {
+.form form .item textarea {
     padding: 8px 0px;
 }
 
-form .fields .item span {
+.form form .fields .item span {
     padding: 8px 16px;
     background-color: rgb(22, 22, 22);
     color: white;
@@ -202,7 +203,7 @@ form .fields .item span {
     font-size: 12px;
 }
 
-form .item select {
+.form form .item select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
@@ -214,7 +215,7 @@ form .item select {
     background-size: .65em auto, 100%
 }
 
-form .fields {
+.form form .fields {
     margin-bottom: 64px;
 }
 
@@ -689,4 +690,128 @@ button[disabled] {
 .form-login ul li a:hover {
     color: black;
     font-weight: bold;
+}
+
+.cart {
+    margin: 32px auto;
+    background-color: white;
+    box-shadow: 2px 2px 2px -2px rgb(47, 47, 47);
+    border-radius: 4px;
+    padding: 32px;
+}
+
+.cartItems {
+    position: relative;
+}
+
+.totalItemsCart {
+    background-color: red;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: -13px;
+    top: -12px;
+
+}
+
+.cartHeader .header {
+    display: grid;
+    grid-template-columns: 1fr 200px 200px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 22px;
+
+}
+
+
+
+.cartItem {
+    display: grid;
+    grid-template-columns: 1fr 200px 200px;
+    align-items: center;
+    position: relative;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #d9d9d9;
+    padding: 22px;
+}
+
+
+.trash {
+    position: absolute;
+    top: 30%;
+    right: 10px;
+    background-color: transparent;
+}
+
+.cartInfo {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 10px;
+    align-items: center;
+
+}
+
+.cartInfo img {
+    width: 100%;
+    height: 60px;
+    object-fit: cover;
+    box-shadow: 2px 2px 2px -2px rgb(47, 47, 47);
+    border-radius: 4px;
+
+}
+
+.quantity-control {
+    display: grid;
+    grid-template-columns: 20px 20px 20px;
+    text-align: center;
+}
+
+.quantity-control .remove,
+.add {
+    background-color: transparent;
+    cursor: pointer;
+}
+
+
+.trashIcon {
+    background-color: transparent;
+    color: red;
+    cursor: pointer;
+}
+
+.cart .acts {
+    display: flex;
+    justify-content: space-between;
+}
+
+.keepShopping {
+    max-width: 200px;
+    height: 40px;
+    font-size: 10px;
+}
+
+.keepRequest {
+    max-width: 200px;
+    height: 40px;
+    font-size: 10px;
+    background-color: forestgreen;
+}
+
+.keepRequest:hover {
+    background-color: rgb(35, 189, 35);
+}
+
+.cartEmpty {
+    text-align: center;
+}
+
+.actsCartEmpty {
+    display: flex;
+    justify-content: center;
 }
