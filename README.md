@@ -7,6 +7,7 @@
     <img src="images/screencapture-localhost-3000-ads-create-2024-08-31-22_28_17.png" alt="Ads Creation Page" style="margin: 5px; padding: 5px;">
     <img src="images/screencapture-localhost-3000-cart-2024-08-31-22_26_24.png" alt="Cart Page" style="margin: 5px; padding: 5px;">
     <img src="images/screencapture-localhost-3000-products-show-28-2024-08-31-22_28_50.png" alt="Product Details Page" style="margin: 5px; padding: 5px;">
+    <img src="images/screencapture-localhost-3000-products-show-28-2024-08-31-22_29_02.png" alt="Search Page" style="margin: 5px; padding: 5px;">
     <img src="images/screencapture-localhost-3000-search-2024-08-31-22_30_52.png" alt="Search Page" style="margin: 5px; padding: 5px;">
     <img src="images/screencapture-localhost-3000-users-2024-08-31-22_47_39.png" alt="Search Page" style="margin: 5px; padding: 5px;">
     <img src="images/screencapture-localhost-3000-login-2024-08-31-22_48_18.png" alt="Search Page" style="margin: 5px; padding: 5px;">
