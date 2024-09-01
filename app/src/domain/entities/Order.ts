@@ -41,4 +41,8 @@ export class Order {
         this.total = total;
         this.updatedAt = new Date();
     }
+
+    setId(value: number) {
+        this.id = value
+    }
 }

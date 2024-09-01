@@ -3,8 +3,6 @@ import { StorageAdapter } from "../database/StorageAdapter";
 import { blobServiceClient } from "../database/AzureBlobConfig";
 
 
-
-
 export class AzureBlobStorageAdapter implements StorageAdapter {
 
     private client: BlobServiceClient;

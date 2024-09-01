@@ -1,0 +1,37 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Carrinho</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="order-detail container">
+    <div class="info">
+        <div class="bueyr">
+            <h4>Comprador</h4>
+            <div class="name">{{order.bueyr.name}}</div>
+            <div class="name">{{order.bueyr.email}}</div>
+            <div class="name">{{order.bueyr.address}}</div>
+            <div class="name">{{order.bueyr.cep}}</div>
+        </div>
+        <div class="status {{order.status}}">
+            <h2>{{order.formattedStatus}}</h2>
+        </div>
+
+    </div>
+
+    <div class="product">
+        <img src="{{order.product.defaultImage.src}}" alt="">
+        <p class="name">{{order.product.name}}</p>
+    </div>
+
+    <div class="total">
+        <h3>Total {{order.total}}</h3>
+    </div>
+</section>
+
+{% endblock %}

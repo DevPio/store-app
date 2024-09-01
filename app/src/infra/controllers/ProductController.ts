@@ -8,23 +8,25 @@ import { UserService } from "../../services/UserService";
 import { Http } from "../http/ExpressAdapter";
 import { FileProduct } from "../../domain/entities/File";
 import { redirectLogin } from "../middlewares/redirectLogin";
+import { ProductFacade } from "../../application/facades/ProductFacade";
 
 
 
 export class ProductController {
-
+    public productFacade: ProductFacade
     constructor(
         http: Http,
         productService: ProductService,
         categoryService: CategoryService,
         storageService: StorageService,
-        fileProductService: FileProductService,
-        userService: UserService
+        fileProductService: FileProductService
+
     ) {
-        this.addStoreRender(http, productService, categoryService, storageService, fileProductService, userService)
+        this.productFacade = new ProductFacade(productService, fileProductService, storageService)
+        this.addStoreRender(http, productService, categoryService, storageService, fileProductService)
     }
 
-    addStoreRender(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService, userService: UserService) {
+    addStoreRender(http: Http, productService: ProductService, categoryService: CategoryService, storageService: StorageService, fileProductService: FileProductService) {
         http.route('post', '/products', async (params: any, body: ProductInput, files: FileArray) => {
 
             const product = await productService.saveProject(body)
@@ -58,37 +60,11 @@ export class ProductController {
                 return { success };
             }
 
-            const products = await productService.getProductByUser(session.user.id)
+            const products = await this.productFacade.productsDetails(session.user.id)
 
-            const productWithDefaultImage = await Promise.all(products.map(async product => {
-                const files = await fileProductService.getFileByProduct(product.id)
-
-                const downloadFiles = await Promise.all(files.map(async file => {
-                    const mimeType = file.path.split('.')[1]
-                    const blobFile = await storageService.downloadFile(file.name, `image/${mimeType}`)
-
-                    return {
-                        id: file.id,
-                        name: file.name,
-                        url: blobFile
-                    }
-                }))
-
-                return {
-                    ...product,
-                    defaultImage: {
-                        src: downloadFiles.at(0)?.url,
-                        name: downloadFiles.at(0)?.name
-                    },
-                    price: Intl.NumberFormat('pt-BR', {
-                        style: 'currency',
-                        currency: 'BRL'
-                    }).format(product.price / 100)
-                }
-            }))
 
             return {
-                products: productWithDefaultImage,
+                products
 
             };
 

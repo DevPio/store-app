@@ -66,13 +66,23 @@ export type UserInput = {
 
 export interface OrderOutPut {
     id: number;
-    sellerId: number;
-    buyerId: number;
-    productId: number;
+    seller_id: number;
+    buyer_id: number;
+    product_id: number;
     price: number;
     quantity: number;
     total: number;
     status: string;
-    createdAt: Date;
-    updatedAt: Date;
+    created_at: Date;
+    updated_at: Date;
+}
+
+export enum StatusOrders {
+    open = "open"
+}
+
+export const Status = {
+    open: "Aberto",
+    sold: "Vendido",
+    close: "Cancelado"
 }

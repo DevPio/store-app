@@ -1,0 +1,44 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Status do pedido</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.14/lottie.min.js"></script>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="container">
+    <div id="statusOrder" {% if animationError %} class="errorAnimation" {% else %} class="successAnimation" {% endif
+        %}>
+        {% if animationError %}
+        <h1>{{animationError.message}}</h1>
+        {% else %}
+        <h1>{{animationSuccess.message}}</h1>
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<script>
+    const container = document.getElementById("statusOrder");
+    let json = "/success.json"
+    if (container.classList.contains('errorAnimation')) {
+        json = "/error.json"
+    }
+
+
+    lottie.loadAnimation({
+        container: container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: json
+    });
+</script>
+
+{% endblock %}

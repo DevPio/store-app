@@ -1,0 +1,79 @@
+{% extends "../index.njk" %}
+
+
+
+{% block head %}
+<title>Carrinho</title>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="order container">
+
+
+    <div class="orders">
+        {% if orders and orders.length > 0 %}
+        {% for order in orders %}
+        <div class="orderItem">
+            <a class="orderInfo" href="#">
+                <img src="{{order.product.defaultImage.src}}" alt="">
+                <span>{{order.product.name}}</span>
+            </a>
+            <span class="price">{{order.product.price}}</span>
+            <span class="quantity">Qtd. {{order.quantity}}</span>
+            {% if order.formattedStatus == "Aberto" %}
+                <span class="status open">{{order.formattedStatus}}</span>
+            {% endif %}
+            {% if order.formattedStatus == "Cancelado" %}
+                <span class="status cancel">{{order.formattedStatus}}</span>
+            {% endif %}
+
+             {% if order.formattedStatus == "Vendido" %}
+                <span class="status sold">{{order.formattedStatus}}</span>
+            {% endif %}
+            <div class="action dropdown-container">
+                <p>Ações</p> <span class="material-symbols-outlined">arrow_drop_down</span>
+                <ul class="dropdown">
+                    <li><a href="/orders/{{order.id}}">Ver pedido</a></li>
+                    <li><a href="/orders/{{order.id}}">Editar Produto</a></li>
+                    {% if  order.status == "open" %}
+                        <li>
+                            <form class="changeStatus" method="post" action="/orders?_method=PUT">
+                                <input type="hidden" name="status" value="0">
+                                <input type="hidden" name="orderId" value="{{order.id}}">
+                                <button>Marcar como Cancelado</button>
+                            </form>
+                        </li>
+                        <li>
+                            <form class="changeStatus" method="post" action="/orders?_method=PUT">
+                                <input type="hidden" name="status" value="1">
+                                <input type="hidden" name="orderId" value="{{order.id}}">
+                                <button>Marcar como Vendido</button>
+                            </form>
+                        </li>   
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% else%}
+        <h1 class="orderEmpty">Nenhum pedido</h1>
+        {% endif %}
+
+        {% if orders and orders.length > 0 %}
+        {# <div class="acts">
+            <button class="button keepShopping">Continuar Comprando</button>
+            <button type="submit" class="button keepRequest">Realizar pedido</button>
+        </div> #}
+        {% else %}
+
+        <div class="actsorderEmpty">
+            <a href="/"><button class="button keepShopping">Continuar Comprando</button></a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

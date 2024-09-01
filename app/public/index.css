@@ -692,7 +692,8 @@ button[disabled] {
     font-weight: bold;
 }
 
-.cart {
+.cart,
+.order {
     margin: 32px auto;
     background-color: white;
     box-shadow: 2px 2px 2px -2px rgb(47, 47, 47);
@@ -720,7 +721,7 @@ button[disabled] {
 
 }
 
-.cartHeader .header {
+.cartHeader {
     display: grid;
     grid-template-columns: 1fr 200px 200px;
     font-weight: bold;
@@ -731,7 +732,8 @@ button[disabled] {
 
 
 
-.cartItem {
+.cartItem,
+.orderItem {
     display: grid;
     grid-template-columns: 1fr 200px 200px;
     align-items: center;
@@ -742,6 +744,10 @@ button[disabled] {
 }
 
 
+.orderItem {
+    grid-template-columns: 1fr 20% 20% 20% 10%;
+}
+
 .trash {
     position: absolute;
     top: 30%;
@@ -749,7 +755,8 @@ button[disabled] {
     background-color: transparent;
 }
 
-.cartInfo {
+.cartInfo,
+.orderInfo {
     display: grid;
     grid-template-columns: 100px 1fr;
     gap: 10px;
@@ -757,7 +764,91 @@ button[disabled] {
 
 }
 
-.cartInfo img {
+.orders {
+    background-color: #d3d3d3;
+}
+
+.action.dropdown-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0 16px;
+    height: 48px;
+    transition: all .2s;
+
+}
+
+.changeStatus button {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: start;
+    cursor: pointer;
+    background: none;
+    color: #333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 48px;
+    padding-inline: none;
+    padding: 0 16px;
+    border-radius: 4px;
+}
+
+.action.dropdown-container:hover {
+    background: white;
+    border-radius: 4px;
+}
+
+.action.dropdown-container:hover ul.dropdown {
+    visibility: initial;
+    opacity: 1;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+ul.dropdown {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    margin-top: 4px;
+    padding: 8px 0;
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .2s;
+    z-index: 1;
+}
+
+ul.dropdown li a {
+    font-size: 13px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 4px;
+
+}
+
+ul.dropdown li {
+    transition: all .2s;
+}
+
+ul.dropdown li:hover {
+    background-color: #eee;
+}
+
+.cartInfo img,
+.orderInfo img {
     width: 100%;
     height: 60px;
     object-fit: cover;
@@ -814,4 +905,116 @@ button[disabled] {
 .actsCartEmpty {
     display: flex;
     justify-content: center;
+}
+
+#statusOrder {
+    margin: 32px auto;
+    padding: 32px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+#statusOrder svg {
+    width: 300px !important;
+}
+
+.status {
+    justify-self: center;
+    color: white;
+    border-radius: 16px;
+    padding: 4px 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.status.open {
+    background-color: rgba(0, 195, 255);
+}
+
+.status.cancel {
+    background-color: rgb(255, 47, 47);
+}
+
+.status.sold {
+    background-color: rgb(36, 255, 29);
+}
+
+.order-detail {
+    padding: 32px;
+    background-color: white;
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px -3px rgb(158, 158, 158);
+
+}
+
+.order-detail .info {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #d3d3d3;
+    width: 100%;
+    padding: 12px;
+}
+
+.order-detail .info h4 {
+    color: #777;
+    font-size: 12px;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.order-detail .status.open {
+    background-color: transparent !important;
+    text-align: center;
+    color: rgba(0, 195, 255);
+}
+
+.order-detail .status.close {
+    background-color: transparent !important;
+    text-align: center;
+    color: rgb(255, 55, 55);
+}
+
+.order-detail .status.sold {
+    background-color: transparent !important;
+    text-align: center;
+    color: rgb(78, 255, 55);
+}
+
+.order-detail .product {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 16px auto;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #d3d3d3;
+    padding: 12px;
+
+}
+
+
+.order-detail .product img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 16px;
+    border-radius: 10px;
+}
+
+.total {
+    text-align: end;
+    padding: 12px;
 }

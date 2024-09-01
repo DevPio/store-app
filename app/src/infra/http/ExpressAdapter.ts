@@ -51,7 +51,7 @@ export class ExpressAdapter implements Http {
             if (output && output.error && redirect) {
                 return res['redirect'](output.url_redirect)
             }
-            if (output && output.error) {
+            if (output && (output.error || output.animationError)) {
                 //@ts-ignore
                 return res['render'](template, { ...output, user: req.session ? req.session.user : null, totalItems: countTotal(cart) });
             }
